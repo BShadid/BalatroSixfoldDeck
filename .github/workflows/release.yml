@@ -1,0 +1,59 @@
+# Builds SixfoldDeck.zip and publishes a GitHub release whenever a version tag is pushed.
+#   git tag v1.0.0 && git push origin v1.0.0
+#
+# The tag must match "version" in SixfoldDeck.json (tag v1.0.0 <-> version 1.0.0), and
+# CHANGELOG.md should have a "## [1.0.0]" section; its text becomes the release notes.
+# Releases are published as full (not pre-) releases so ".../releases/latest" always works,
+# which the README's download link and the Balatro Mod Index both rely on.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag matches the mod version
+        run: |
+          VERSION=$(jq -r .version SixfoldDeck.json)
+          TAG="${GITHUB_REF_NAME}"
+          if [ "v${VERSION}" != "${TAG}" ]; then
+            echo "::error::Tag ${TAG} does not match version ${VERSION} in SixfoldDeck.json"
+            exit 1
+          fi
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+
+      - name: Build SixfoldDeck.zip
+        run: |
+          # Only what players need; art_src, docs and repo files stay out of the download.
+          mkdir -p build/SixfoldDeck
+          cp -r SixfoldDeck.json main.lua localization assets LICENSE README.md build/SixfoldDeck/
+          cd build && zip -r ../SixfoldDeck.zip SixfoldDeck
+
+      - name: Extract this version's changelog notes
+        run: |
+          awk -v ver="${VERSION}" '
+            $0 ~ "^## \\[" ver "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "No CHANGELOG.md section found for ${VERSION}." > notes.md
+          fi
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" SixfoldDeck.zip \
+            --title "Sixfold Deck ${VERSION}" \
+            --notes-file notes.md

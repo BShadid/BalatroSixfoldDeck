@@ -1,0 +1,17 @@
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+
+# Build output (release zips are built by the release workflow)
+*.zip
+build/
+
+# Art script scratch output
+art_src/out/
+__pycache__/
