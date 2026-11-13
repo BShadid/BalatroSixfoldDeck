@@ -744,9 +744,29 @@ SMODS.Sound { key = 'seance_2',     path = 'seance_2.ogg' }
 SMODS.Sound { key = 'seance_3',     path = 'seance_3.ogg' }
 
 -- Timing, in real seconds (unaffected by the game speed setting).
-local SEANCE_INTRO_LENGTH = 1.0  -- must match seance_intro.ogg's length; scoring waits this long
-local SEANCE_CARD_GAP     = 0.5  -- pause between the first and second Spectral card
-local SEANCE_VOLUME       = 0.7
+local SEANCE_INTRO_FALLBACK = 1.0  -- used only if seance_intro.ogg's length can't be measured
+local SEANCE_CARD_GAP       = 0.5  -- pause between the first and second Spectral card
+local SEANCE_VOLUME         = 0.7
+
+-- How long scoring waits for the intro: the real length of seance_intro.ogg, so a
+-- replacement file of any length lines up without code changes. Steamodded keeps each
+-- loaded sound's file data, which LÖVE can decode to read its duration. Measured once, the
+-- first time it's needed; if anything about that fails, the fallback above is used.
+local seance_intro_length_cache
+local function seance_intro_length()
+    if seance_intro_length_cache then return seance_intro_length_cache end
+    local length
+    local sound = SMODS.Sounds and SMODS.Sounds['sixf_seance_intro']
+    if sound and sound.data and love and love.sound and love.sound.newDecoder then
+        local ok, decoder = pcall(love.sound.newDecoder, sound.data)
+        if ok and decoder then
+            local ok2, duration = pcall(decoder.getDuration, decoder)
+            if ok2 and type(duration) == 'number' and duration > 0 then length = duration end
+        end
+    end
+    seance_intro_length_cache = length or SEANCE_INTRO_FALLBACK
+    return seance_intro_length_cache
+end
 
 -- Queue a pause that holds up everything queued after it (scoring included).
 local function wait_real(seconds)
@@ -791,7 +811,7 @@ SMODS.Joker:take_ownership('seance', {
                     return true
                 end,
             }))
-            wait_real(SEANCE_INTRO_LENGTH)
+            wait_real(seance_intro_length())
             return  -- nothing else happens here; vanilla Seance has no "before" effect
         end
 
