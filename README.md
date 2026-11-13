@@ -4,7 +4,9 @@ A [Balatro](https://www.playbalatro.com/) mod that adds the **Sixfold Deck**: a 
 
 <p align="center"><img src="docs/deck_back.png" alt="Sixfold Deck card back (placeholder art)" width="142"></p>
 
-> **AI disclosure:** this mod was built with AI assistance. The code, and the current card back and planet card art, were created with an AI assistant. The art is a **placeholder** and will be replaced with commissioned, human-made pixel art. [Details below.](#ai-assistance)
+> **AI disclosure:** this mod was built with AI assistance. The code, and the current card back and planet card art, were created with an AI assistant. The art is a **placeholder** and will be replaced with commissioned, human-made pixel art before the first release. [Details below.](#ai-assistance)
+
+**Status: in development.** There's no release yet. The first release will come out once all the placeholder art has been replaced with human-made art.
 
 ## The deck
 
@@ -42,7 +44,7 @@ Each new hand has its own planet: moons for the regular hands, dwarf planets for
 
 ![The nine new planet cards (placeholder art)](docs/planets.png)
 
-*Placeholder art, made with AI-assisted code. It will be replaced with commissioned, human-made pixel art.*
+*Placeholder art, made with AI-assisted code. It will be replaced with commissioned, human-made pixel art before the first release.*
 
 Io (Three Pair) · Europa (Long Straight) · Ganymede (Big Flush) · Callisto (Double Trips) · Titan (Mansion) · Triton (Long Straight Flush) · Haumea (Six of a Kind) · Makemake (Flush Mansion) · Sedna (Flush Six)
 
@@ -61,12 +63,16 @@ Each changed joker shows an extra tooltip explaining its change during Sixfold r
 
 ## Installation
 
+There's no release yet (see **Status** above). Once there is:
+
 1. Install [Steamodded](https://github.com/Steamodded/smods) (and Lovely, which it needs).
 2. Download `SixfoldDeck.zip` from the [latest release](https://github.com/BShadid/BalatroSixfoldDeck/releases/latest).
 3. Unzip it into your Mods folder, so you end up with `Mods/SixfoldDeck/`:
    - Windows: `%AppData%/Balatro/Mods`
    - macOS: `~/Library/Application Support/Balatro/Mods`
 4. Start Balatro and pick the Sixfold Deck.
+
+To try the in-development version now, with placeholder art, use **Code → Download ZIP** on this page. Unzip it, rename the folder to `SixfoldDeck`, and put it in your Mods folder as above.
 
 ### Requirements
 
@@ -104,7 +110,7 @@ python art_src/make_back.py out       # back_1x.png, back_2x.png
 This mod was developed with the help of an AI assistant (Anthropic's Claude). In the current build:
 
 - **Code:** the Lua code in `main.lua` and `localization/`, and the release workflow, were written with AI assistance. The deck's design, balance decisions and play-testing are by TCM.
-- **Card back and planet card art:** created with AI-assisted code. The Python scripts in `art_src/` were written with the AI assistant and draw each image pixel by pixel. No image-generation models were used, but the art should still be considered AI-assisted. **This art is a placeholder** while I find an artist to commission human-made pixel art, which will replace it in a future update.
+- **Card back and planet card art:** created with AI-assisted code. The Python scripts in `art_src/` were written with the AI assistant and draw each image pixel by pixel. No image-generation models were used, but the art should still be considered AI-assisted. **This art is a placeholder** while I find an artist to commission human-made pixel art. All of it will be replaced before the first release.
 - **Seance sound effects:** simple tones synthesised by AI-assisted code, also placeholders.
 
 Future art credits will be listed here.

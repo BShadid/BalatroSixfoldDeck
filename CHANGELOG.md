@@ -3,9 +3,12 @@
 All notable changes to the Sixfold Deck are listed here. Versions follow the `version`
 field in `SixfoldDeck.json`; each release's notes are taken from its section below.
 
-## [0.9.5] - 2026-11-13
+## [Unreleased]
 
-First public release.
+In development (currently version 0.9.5 in `SixfoldDeck.json`). The first public release
+will come once all the placeholder art has been replaced with commissioned, human-made pixel
+art. When releasing, rename this heading to the release version and date, e.g.
+`## [1.0.0] - 2027-01-15`; the release workflow takes its notes from that section.
 
 **AI disclosure:** this mod was built with AI assistance (Anthropic's Claude). The code, and
 the current card back, planet card art and sound effects, were created with AI-assisted code.
