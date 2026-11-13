@@ -843,11 +843,16 @@ SMODS.Joker:take_ownership('trousers', {
 
 -- Faceless Joker: discarding 6 face cards at once earns $12 instead of $5.
 -- (Pareidolia makes every card a face card, so it counts any 6.)
+-- Vanilla Faceless pays during the discard itself, once, as the last discarded card is
+-- processed. We step in at that same moment: returning our payout there replaces the
+-- vanilla $5 rather than adding to it.
 local FACELESS_SIX_DOLLARS = 12
 SMODS.Joker:take_ownership('faceless', {
     loc_vars = sixfold_tooltip('sixf_faceless'),
     calculate = function(self, card, context)
-        if not (context.pre_discard and sixfold_active()) then return end
+        if not (context.discard and sixfold_active()) then return end
+        local hand = context.full_hand or {}
+        if context.other_card ~= hand[#hand] then return end  -- only on the last card
         local faces = 0
         for _, c in ipairs(context.full_hand or {}) do
             if c:is_face() then faces = faces + 1 end

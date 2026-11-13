@@ -66,8 +66,9 @@ Each changed joker shows an extra tooltip explaining its change during Sixfold r
 
 ### Requirements
 
-- Steamodded **1.0.0~BETA-0509c** or newer
-- Tested on Balatro **1.0.1o**
+- Steamodded **26.1002.0** (tested). Older versions back to **1.0.0~BETA-0509c** are also supported.
+- Lovely **0.9.0** or newer (required by current Steamodded)
+- The latest Steam version of Balatro
 
 ## Development
 

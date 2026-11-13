@@ -3,7 +3,7 @@
 All notable changes to the Sixfold Deck are listed here. Versions follow the `version`
 field in `SixfoldDeck.json`; each release's notes are taken from its section below.
 
-## [0.9.4] - 2026-11-13
+## [0.9.5] - 2026-11-13
 
 First public release.
 
