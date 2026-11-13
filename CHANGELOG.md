@@ -7,6 +7,11 @@ field in `SixfoldDeck.json`; each release's notes are taken from its section bel
 
 First public release.
 
+**AI disclosure:** this mod was built with AI assistance (Anthropic's Claude). The code, and
+the current card back, planet card art and sound effects, were created with AI-assisted code.
+The art and sounds are placeholders and will be replaced with commissioned, human-made work.
+See the README's "AI assistance" section for details.
+
 ### Compatibility
 - Works with current Steamodded (26.x) as well as 1.0.0~BETA-0509c: on versions that
   support it, the cash-out bonus uses Steamodded's own cash-out line for decks; older
