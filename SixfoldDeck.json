@@ -1,11 +1,15 @@
 {
   "id": "SixfoldDeck",
   "name": "Sixfold Deck",
-  "author": ["TCM"],
-  "description": "Adds the Sixfold Deck: play and discard up to 6 cards, with nine new 6-card poker hands, their planet cards, and a growing X-Mult bonus for playing them.",
+  "author": [
+    "TCM"
+  ],
+  "description": "Adds the Sixfold Deck: play and discard up to 6 cards, with nine new 6-card poker hands, their planet cards, and a growing X-Mult bonus for playing them. Built with AI assistance: the current art and sounds are AI-assisted placeholders, to be replaced with commissioned, human-made work.",
   "prefix": "sixf",
   "main_file": "main.lua",
   "version": "0.9.5",
   "badge_colour": "D9773A",
-  "dependencies": ["Steamodded (>=1.0.0~BETA-0509c)"]
+  "dependencies": [
+    "Steamodded (>=1.0.0~BETA-0509c)"
+  ]
 }
