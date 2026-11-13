@@ -131,12 +131,30 @@ end
 ---------------------------------------------------------------------------------------------
 -- Cash-out bonus: MONEY_PER_SIX dollars for each new 6-card hand played this round
 ---------------------------------------------------------------------------------------------
--- The game builds the cash-out screen one line at a time and finishes with the total
--- ('bottom'). Just before the total, we add our own line and fold its dollars into the total.
---
--- Our line reuses the game's joker-payout line style (an orange label, like Golden Joker's).
--- That style looks up a name for the line's card, so we give it a stand-in "card" whose
--- name entry we write ourselves, and which makes the x-Mult badge bounce when paid out.
+-- Two ways to pay it, depending on the Steamodded version:
+--   * Newer Steamodded asks each deck for a dollar bonus at cash-out (the deck's
+--     calc_dollar_bonus, defined on the deck below) and shows it as its own line.
+--   * Older versions (e.g. 1.0.0~BETA-0509c) don't, so we patch add_round_eval_row (below).
+-- Both take from the same per-round count, which is emptied when paid, so the bonus is paid
+-- exactly once whichever runs: on newer versions the deck pays first and the patch finds
+-- nothing left to pay.
+
+-- Takes this round's 6-card hand count, leaving 0 behind.
+local function take_round_six_hands()
+    local count = (G.GAME and G.GAME.sixf_round_six_hands) or 0
+    if G.GAME then G.GAME.sixf_round_six_hands = 0 end
+    return count
+end
+
+local function cashout_label(count)
+    return '6-Card Hands x' .. count .. ' ($' .. MONEY_PER_SIX .. ' each)'
+end
+
+-- Older-version patch: the game builds the cash-out screen one line at a time and finishes
+-- with the total ('bottom'). Just before the total, we add our own line and fold its dollars
+-- into the total. Our line reuses the game's joker-payout line style (an orange label, like
+-- Golden Joker's). That style looks up a name for the line's card, so we give it a stand-in
+-- "card" whose name entry we write ourselves, and which makes the x-Mult badge bounce.
 
 local CASHOUT_LABEL_KEY = 'sixf_cashout'
 
@@ -152,7 +170,7 @@ local function set_cashout_label(count)
     if not descriptions then return end
     descriptions.Other = descriptions.Other or {}
     descriptions.Other[CASHOUT_LABEL_KEY] = {
-        name = '6-Card Hands x' .. count .. ' ($' .. MONEY_PER_SIX .. ' each)',
+        name = cashout_label(count),
         text = {},
     }
 end
@@ -160,8 +178,7 @@ end
 local add_round_eval_row_ref = add_round_eval_row
 function add_round_eval_row(config)
     if config and config.name == 'bottom' and sixfold_active() then
-        local count = G.GAME.sixf_round_six_hands or 0
-        G.GAME.sixf_round_six_hands = 0
+        local count = take_round_six_hands()
         if count > 0 then
             local bonus = count * MONEY_PER_SIX
             set_cashout_label(count)
@@ -249,6 +266,15 @@ SMODS.Back {
             colour = G.C.MULT,
             xmult = value,
         }
+    end,
+
+    -- Cash-out bonus on newer Steamodded, which calls this at cash-out and shows the amount
+    -- as its own line with this label. (See the cash-out section above for older versions.)
+    calc_dollar_bonus = function(self, back)
+        local count = take_round_six_hands()
+        if count > 0 then
+            return count * MONEY_PER_SIX, { text = cashout_label(count) }
+        end
     end,
 
     apply = function(self, back)
@@ -866,9 +892,14 @@ function Game:start_run(args)
     create_xmult_badge()
 
     if sixfold_active() then
-        -- Older Steamodded: vanilla creates the hand with highlighted_limit = 5.
-        if not HAS_SMODS_LIMITS and G.hand then
-            G.hand.config.highlighted_limit = math.max(G.hand.config.highlighted_limit or 5, G.GAME.sixf_limit)
+        -- Make sure the hand lets you select 6. Older Steamodded: vanilla creates the hand
+        -- with a limit of 5, so this is what raises it. Newer Steamodded: the limit is saved
+        -- with the run and restored, so this is only a safety net.
+        if G.hand then
+            local params = G.GAME.starting_params or {}
+            G.hand.config.highlighted_limit = math.max(
+                G.hand.config.highlighted_limit or 5, G.GAME.sixf_limit,
+                params.play_limit or 0, params.discard_limit or 0)
         end
     elseif G.GAME and G.GAME.hands then
         -- Other decks: keep the new hands out of Run Info.

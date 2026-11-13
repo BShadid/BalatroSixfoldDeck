@@ -3,9 +3,14 @@
 All notable changes to the Sixfold Deck are listed here. Versions follow the `version`
 field in `SixfoldDeck.json`; each release's notes are taken from its section below.
 
-## [0.9.3] - 2026-11-13
+## [0.9.4] - 2026-11-13
 
 First public release.
+
+### Compatibility
+- Works with current Steamodded (26.x) as well as 1.0.0~BETA-0509c: on versions that
+  support it, the cash-out bonus uses Steamodded's own cash-out line for decks; older
+  versions fall back to the previous method.
 
 ### Added
 - **Sixfold Deck:** play and discard up to 6 cards; −1 hand every round.
